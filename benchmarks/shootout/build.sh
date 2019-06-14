@@ -2,8 +2,9 @@ mkdir -p out
 
 export bench=$1
 
-export cflags_innative="check_int_division check_memory_access \
-                        check_float_trunc check_indirect_call check_stack_overflow"
+export cflags_innative="disable_tail_call check_int_division check_memory_access \
+                        check_float_trunc check_indirect_call check_stack_overflow \
+                        noinit sandbox strict"
 
 gcc -O3 -o out/${bench}_native -Dblack_box=set_res \
         -Dbench=${bench} \

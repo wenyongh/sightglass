@@ -1,6 +1,7 @@
 #include <sightglass.h>
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #define LENGTH 40000000
 
@@ -13,11 +14,11 @@ typedef struct RandomCtx_ {
     long   ic;
     long   im;
     int    n;
-    double res;
+    int64_t res;
 } RandomCtx;
 
-static inline double
-gen_random(double max, long ia, long ic, long im)
+static inline int64_t
+gen_random(int64_t max, long ia, long ic, long im)
 {
     static long last = 42;
 
@@ -46,8 +47,8 @@ random_body(void *ctx_)
 
     int n = ctx->n;
     while (n--) {
-        gen_random(100.0, ctx->ia, ctx->ic, ctx->im);
+        gen_random(100, ctx->ia, ctx->ic, ctx->im);
     }
-    ctx->res = gen_random(100.0, ctx->ia, ctx->ic, ctx->im);
+    ctx->res = gen_random(100, ctx->ia, ctx->ic, ctx->im);
     BLACK_BOX(ctx->res);
 }
