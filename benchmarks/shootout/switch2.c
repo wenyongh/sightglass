@@ -8,6 +8,8 @@
 #define ITERATIONS 500
 #define LENGTH 2500
 
+static uint32_t x_buf[LENGTH] = { 0 };
+
 void
 switch2_body(void *ctx_)
 {
@@ -16,7 +18,7 @@ switch2_body(void *ctx_)
     size_t length = LENGTH;
 
     uint32_t *x;
-    x = malloc(LENGTH * sizeof *x);
+    x = x_buf;//malloc(LENGTH * sizeof *x);
     assert(x != NULL);
 
     size_t i;
@@ -3111,5 +3113,11 @@ switch2_body(void *ctx_)
 
     BLACK_BOX(x);
 
-    free(x);
+    uint32_t res = 0;
+    for (i = 0; i < LENGTH; i++)
+        res ^= x[i];
+
+    BLACK_BOX(res);
+
+    //free(x);
 }
