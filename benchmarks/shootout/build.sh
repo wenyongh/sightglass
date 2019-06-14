@@ -17,7 +17,7 @@ clang-8 -O3 --target=wasm32 -nostdlib \
         -Wl,--no-threads,--strip-all,--no-entry \
         -o out/${bench}.wasm \
         -Wl,--export=app_main \
-        ${bench}.c main/main_${bench}.c
+        ${bench}.c main/main_${bench}.c main/my_libc.c
 
 wavm-disas out/${bench}.wasm out/${bench}.wast
 
