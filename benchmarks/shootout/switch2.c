@@ -27,7 +27,7 @@ switch2_body(void *ctx_)
     }
 
     int j;
-    for (j = 0; j < ITERATIONS; j++) {
+    for (j = 0; j < ITERATIONS * 200; j++) {
         BLACK_BOX(x);
         BLACK_BOX(length);
         for (i = (size_t) 0U; i < length; i++) {
@@ -635,6 +635,7 @@ switch2_body(void *ctx_)
             case 200:
                 x[i] ^= 3089;
 
+#if 0
             case 201:
                 x[i] ^= 3222;
 
@@ -3103,6 +3104,7 @@ switch2_body(void *ctx_)
 
             case 1023:
                 x[i] ^= 3307;
+#endif
 
             default:
                 x[i]++;
