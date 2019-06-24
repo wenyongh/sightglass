@@ -198,13 +198,15 @@ hashseq_solve(HashSeqArena *arena, HashSeqSolution *solutions, const uint32_t su
     return 0;
 }
 
+static uint8_t buf_seqhash[ARENA_SIZE] = { 0 };
+
 static void
 seqhash_setup(void *global_ctx, void **ctx_p)
 {
     (void) global_ctx;
 
-    uint8_t *buf = calloc(ARENA_SIZE, (size_t) 1U);
-    assert(buf != NULL);
+    uint8_t *buf = buf_seqhash;//calloc(ARENA_SIZE, (size_t) 1U);
+    //assert(buf != NULL);
 
     *ctx_p = (void *) buf;
 }
@@ -212,7 +214,7 @@ seqhash_setup(void *global_ctx, void **ctx_p)
 static void
 seqhash_teardown(void *ctx)
 {
-    free(ctx);
+    //free(ctx);
 }
 
 void
