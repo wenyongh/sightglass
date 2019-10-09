@@ -137,6 +137,21 @@ bin2base64(char *const b64, const size_t b64_maxlen, const unsigned char *const 
     return b64;
 }
 
+static char *my_strchr(const char *s, int c)
+{
+    unsigned char ch = (unsigned char)c, ch1;
+    unsigned char *p = (unsigned char*)s;
+
+    if (!s)
+        return NULL;
+
+    while ((ch1 = *p++) != '\0')
+        if (ch1 == ch)
+            return (char*)p - 1;
+
+    return NULL;
+}
+
 static int
 _base642bin_skip_padding(const char *const b64, const size_t b64_len, size_t *const b64_pos_p,
                          const char *const ignore, size_t padding_len)
@@ -151,7 +166,7 @@ _base642bin_skip_padding(const char *const b64, const size_t b64_len, size_t *co
         c = b64[*b64_pos_p];
         if (c == '=') {
             padding_len--;
-        } else if (ignore == NULL || strchr(ignore, c) == NULL) {
+        } else if (ignore == NULL || my_strchr(ignore, c) == NULL) {
             //errno = EINVAL;
             return -1;
         }
@@ -184,7 +199,7 @@ base642bin(unsigned char *const bin, const size_t bin_maxlen, const char *const 
             d = b64_char_to_byte(c);
         }
         if (d == 0xFF) {
-            if (ignore != NULL && strchr(ignore, c) != NULL) {
+            if (ignore != NULL && my_strchr(ignore, c) != NULL) {
                 b64_pos++;
                 continue;
             }
@@ -211,7 +226,7 @@ base642bin(unsigned char *const bin, const size_t bin_maxlen, const char *const 
     if (ret != 0) {
         bin_pos = (size_t) 0U;
     } else if (ignore != NULL) {
-        while (b64_pos < b64_len && strchr(ignore, b64[b64_pos]) != NULL) {
+        while (b64_pos < b64_len && my_strchr(ignore, b64[b64_pos]) != NULL) {
             b64_pos++;
         }
     }

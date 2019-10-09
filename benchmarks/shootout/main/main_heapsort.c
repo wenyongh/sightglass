@@ -14,13 +14,15 @@ unsigned get_res()
     return res;
 }
 
-void gimli_body(void *ctx);
+void heapsort_setup(void *global_ctx, void **ctx_p);
+void heapsort_body(void *ctx);
 
 unsigned app_main()
 {
     void *p_ctx;
 
-    gimli_body(p_ctx);
+    heapsort_setup(NULL, &p_ctx);
+    heapsort_body(p_ctx);
     return get_res();
 }
 
@@ -35,19 +37,19 @@ int main(int argc, char **argv)
 
 #else
 
-void gimli_WASM_innative_internal_init();
-void gimli_WASM_innative_internal_exit();
-unsigned gimli_WASM_app_main();
+void heapsort_WASM_innative_internal_init();
+void heapsort_WASM_innative_internal_exit();
+unsigned heapsort_WASM_app_main();
 int main(int argc, char **argv)
 {
     unsigned ret = 0;
    
-    gimli_WASM_innative_internal_init();
+    heapsort_WASM_innative_internal_init();
 
-    ret = gimli_WASM_app_main();
+    ret = heapsort_WASM_app_main();
     printf("##ret: %d\n", ret);
 
-    gimli_WASM_innative_internal_exit();
+    heapsort_WASM_innative_internal_exit();
 }
 
 #endif

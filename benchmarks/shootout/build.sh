@@ -20,7 +20,7 @@ clang-8 -O3 --target=wasm32 -nostdlib \
         -Wl,--export=app_main \
         ${bench}.c main/main_${bench}.c main/my_libc.c
 
-wavm-disas out/${bench}.wasm out/${bench}.wast
+wavm disassemble out/${bench}.wasm out/${bench}.wast
 
 innative-cmd out/${bench}.wasm \
         -f o3 ${cflags_innative} \

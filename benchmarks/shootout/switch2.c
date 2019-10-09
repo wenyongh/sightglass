@@ -1,7 +1,7 @@
 
 #include <sightglass.h>
 
-#include <assert.h>
+//#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -19,7 +19,7 @@ switch2_body(void *ctx_)
 
     uint32_t *x;
     x = x_buf;//malloc(LENGTH * sizeof *x);
-    assert(x != NULL);
+    //assert(x != NULL);
 
     size_t i;
     for (i = (size_t) 0U; i < length; i++) {
