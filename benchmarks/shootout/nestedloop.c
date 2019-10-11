@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define LENGTH 30
+#define LENGTH 100
 
 typedef struct NestedLoopCtx_ {
     int n;
@@ -44,6 +44,6 @@ nestedloop_body(void *ctx_)
         }
     }
 
-    BLACK_BOX(x);
     ctx->res = x;
+    BLACK_BOX(x);
 }

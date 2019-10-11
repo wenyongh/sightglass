@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define LENGTH 30
+#define LENGTH 100
 
 typedef struct NestedLoop2Ctx_ {
     int n;
