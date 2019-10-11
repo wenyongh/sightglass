@@ -10,3 +10,13 @@ void *memset(void *s, int c, size_t n)
     }
     return s;
 }
+
+void *memmove(void *dest, const void *src, size_t n)
+{
+    char *p_dst = (char*)dest, *p_dst_end = p_dst + n;
+    char *p_src = (char*)src;
+
+    while (p_dst < p_dst_end)
+        *p_dst++ = *p_src++;
+    return dest;
+}

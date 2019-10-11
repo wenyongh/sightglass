@@ -124,16 +124,19 @@ minicsv_body(void *ctx_)
         BLACK_BOX(buf);
         r = minicsv_parse_line(r, cols, &cols_count, sizeof cols / sizeof cols[0]);
         if (cols_count > sizeof cols / sizeof cols[0]) {
-            abort();
+            //abort();
+            return;
         }
         minicsv_trim_cols(cols, cols_count);
         BLACK_BOX(cols);
         r = minicsv_parse_line(r, cols, &cols_count, sizeof cols / sizeof cols[0]);
         if (cols_count > sizeof cols / sizeof cols[0]) {
-            abort();
+            //abort();
+            return;
         }
         minicsv_trim_cols(cols, cols_count);
         BLACK_BOX(cols_count);
         BLACK_BOX(r);
     }
+    BLACK_BOX(cols_count);
 }
