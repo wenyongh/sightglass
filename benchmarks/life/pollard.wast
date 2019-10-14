@@ -25,7 +25,7 @@
   (global $18  (mut i32) (i32.const 1048576))
   (global $19  i32 (i32.const 1049944))
   (global $20  i32 (i32.const 1049944))
-  (elem $21 $16 (i32.const 1)
+  (elem $21 (table $16) (i32.const 1)
     $_ZN3std5alloc24default_alloc_error_hook17h6ba7156e24cb15c8E $_ZN76_$LT$std..sys_common..thread_local..Key$u20$as$u20$core..ops..drop..Drop$GT$4drop17h55b2c3f5c3e62f2bE $_ZN96_$LT$core..fmt..Write..write_fmt..Adapter$LT$$u27$_$C$$u20$T$GT$$u20$as$u20$core..fmt..Write$GT$9write_str17hac2e1438b6f2752fE $_ZN96_$LT$core..fmt..Write..write_fmt..Adapter$LT$$u27$_$C$$u20$T$GT$$u20$as$u20$core..fmt..Write$GT$10write_char17h73a56c885ce2fbd8E $_ZN96_$LT$core..fmt..Write..write_fmt..Adapter$LT$$u27$_$C$$u20$T$GT$$u20$as$u20$core..fmt..Write$GT$9write_fmt17h7e24f35ebda71701E $_ZN4core3ptr18real_drop_in_place17h3138fb852db57faaE $_ZN36_$LT$T$u20$as$u20$core..any..Any$GT$11get_type_id17h9941605ae040ba56E $_ZN4core3ptr18real_drop_in_place17h1c28015336001444E
     $_ZN103_$LT$std..panicking..continue_panic_fmt..PanicPayload$LT$$u27$a$GT$$u20$as$u20$core..panic..BoxMeUp$GT$9box_me_up17h791780eaa23b97d6E $_ZN103_$LT$std..panicking..continue_panic_fmt..PanicPayload$LT$$u27$a$GT$$u20$as$u20$core..panic..BoxMeUp$GT$3get17h41728fb47fa1cac2E $_ZN4core3ptr18real_drop_in_place17h5d7a48ff7bca8c14E $_ZN36_$LT$T$u20$as$u20$core..any..Any$GT$11get_type_id17hc325c760c58ca5ceE $_ZN4core3fmt3num52_$LT$impl$u20$core..fmt..Display$u20$for$u20$u32$GT$3fmt17h4a3be6b364cb0cd1E $_ZN4core3fmt10ArgumentV110show_usize17hc319ac4009aa0eccE $_ZN4core3ptr18real_drop_in_place17h0a9cef5e67da1826E $_ZN36_$LT$T$u20$as$u20$core..any..Any$GT$11get_type_id17h41b2a9aa8c6d3132E)
   (data $22 $17 (i32.const 1048576)

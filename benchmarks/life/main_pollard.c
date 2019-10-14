@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     pollard_WASM_innative_internal_init();
 
     ret = pollard_WASM_app_main();
-    printf("##ret: %lld\n", ret);
+    printf("##ret: %ld\n", ret);
 
     pollard_WASM_innative_internal_exit();
 }
