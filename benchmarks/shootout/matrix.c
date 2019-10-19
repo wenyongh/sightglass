@@ -5,18 +5,26 @@
 #include <stdlib.h>
 
 #define LENGTH 300000
-#define SIZE 10
+#define SIZE 20
+
+static char buf[102400] = { 0 };
+static char *p = buf;
 
 static int **
 mkmatrix(int rows, int cols)
 {
-    int **m = calloc(rows, sizeof(int *));
-    assert(m != NULL);
+    //int **m = calloc(rows, sizeof(int *));
+    //assert(m != NULL);
+
+    int **m = (int**)p;
+    p += rows * sizeof(int *);
 
     int i, j, count = 1;
     for (i = 0; i < rows; i++) {
-        m[i] = calloc(cols, sizeof(int));
-        assert(m[i] != NULL);
+        //m[i] = calloc(cols, sizeof(int));
+        //assert(m[i] != NULL);
+        m[i] = (int*)p;
+        p += cols * sizeof(int);
         for (j = 0; j < cols; j++) {
             m[i][j] = count++;
         }
@@ -27,10 +35,12 @@ mkmatrix(int rows, int cols)
 static void
 freematrix(int rows, int **m)
 {
+    /*
     while (--rows > -1) {
         free(m[rows]);
     }
     free(m);
+    */
 }
 
 static int **
@@ -70,7 +80,7 @@ matrix_setup(void *global_ctx, void **ctx_p)
     ctx.m1   = mkmatrix(ctx.rows, ctx.cols);
     ctx.m2   = mkmatrix(ctx.rows, ctx.cols);
     ctx.mm   = mkmatrix(ctx.rows, ctx.cols);
-    assert(ctx.m1 != NULL && ctx.m2 != NULL && ctx.mm != NULL);
+    //assert(ctx.m1 != NULL && ctx.m2 != NULL && ctx.mm != NULL);
 
     *ctx_p = (void *) &ctx;
 }

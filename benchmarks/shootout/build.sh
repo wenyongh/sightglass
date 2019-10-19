@@ -10,9 +10,10 @@ export cflags_innative1="sandbox noinit library"
 
 gcc -O3 -o out/${bench}_native -Dblack_box=set_res \
         -Dbench=${bench} \
-        -I../../include ${bench}.c main/main_${bench}.c
+        -I../../include ${bench}.c main/main_${bench}.c main/my_libc.c
 
 clang-8 -O3 --target=wasm32 -nostdlib \
+        -Wno-unknown-attributes \
         -Dblack_box=set_res \
         -DINNATIVE_WASM \
         -I../../include \

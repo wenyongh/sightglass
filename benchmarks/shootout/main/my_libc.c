@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+__attribute__ ((__optimize__ ("-fno-tree-loop-distribute-patterns")))
 void *memset(void *s, int c, size_t n)
 {
     if (s) {
