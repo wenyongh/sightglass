@@ -15,3 +15,5 @@ innative-cmd ${bench}.wasm \
 
 gcc -O3 -o ${bench}_innative main_${bench}.c -L. -l${bench}
 
+iwasm-aotc -o ${bench}.iwasm-aot ${bench}.wasm
+
