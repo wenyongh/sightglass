@@ -6,7 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef TEST_INTERPRETER
 #define ITERATIONS 20000
+#else
+#define ITERATIONS 2000
+#endif
 
 #define base64_ENCODED_LEN(BIN_LEN, VARIANT)                                                     \
     (((BIN_LEN) / 3U) * 4U +                                                                     \

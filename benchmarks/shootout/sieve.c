@@ -3,7 +3,11 @@
 
 #include <stdlib.h>
 
+#ifndef TEST_INTERPRETER
 #define LENGTH 17000
+#else
+#define LENGTH 1700
+#endif
 
 typedef struct SieveCtx_ {
     unsigned long n;

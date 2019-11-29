@@ -12,7 +12,11 @@ fib2_setup(void *global_ctx, void **ctx_p)
     (void) global_ctx;
 
     static Fib2Ctx ctx;
+#ifndef TEST_INTERPRETER
     ctx.n = 42;
+#else
+    ctx.n = 32;
+#endif
 
     *ctx_p = (void *) &ctx;
 }

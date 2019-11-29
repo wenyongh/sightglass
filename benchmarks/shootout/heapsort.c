@@ -4,8 +4,13 @@
 //#include <math.h>
 #include <stdlib.h>
 
+#ifndef TEST_INTERPRETER
 #define LENGTH 10000
 #define ITERATIONS 1000
+#else
+#define LENGTH 1000
+#define ITERATIONS 100
+#endif
 
 #define IM 139968
 #define IA 3877

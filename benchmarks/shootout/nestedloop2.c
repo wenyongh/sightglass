@@ -3,7 +3,11 @@
 
 #include <stdlib.h>
 
+#ifndef TEST_INTERPRETER
 #define LENGTH 100
+#else
+#define LENGTH 20
+#endif
 
 typedef struct NestedLoop2Ctx_ {
     int n;

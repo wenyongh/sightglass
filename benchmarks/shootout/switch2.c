@@ -5,8 +5,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifndef TEST_INTERPRETER
 #define ITERATIONS 500
 #define LENGTH 2500
+#else
+#define ITERATIONS 100
+#define LENGTH 500
+#endif
 
 static uint32_t x_buf[LENGTH] = { 0 };
 

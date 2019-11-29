@@ -5,7 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef TEST_INTERPRETER
 #define STR_SIZE 10000
+#else
+#define STR_SIZE 1000
+#endif
 #define ITERATIONS 10
 
 typedef struct MemmoveCtx_ {

@@ -4,7 +4,11 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#ifndef TEST_INTERPRETER
 #define LENGTH 300000
+#else
+#define LENGTH 1000
+#endif
 #define SIZE 20
 
 static char buf[102400] = { 0 };

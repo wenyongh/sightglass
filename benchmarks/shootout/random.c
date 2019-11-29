@@ -3,7 +3,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#ifndef TEST_INTERPRETER
 #define LENGTH 40000000
+#else
+#define LENGTH 10000000
+#endif
 
 #define IA 3877
 #define IC 29573

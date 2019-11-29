@@ -9,7 +9,11 @@
 
 #define ARENA_SIZE ((size_t) 1000000)
 #define LEVEL_FIRST 1
+#ifndef TEST_INTERPRETER
 #define LEVEL_LAST 5
+#else
+#define LEVEL_LAST 1
+#endif
 #define LEVELS (LEVEL_LAST - LEVEL_FIRST + 1)
 #define HASH_ITERATIONS 1
 
