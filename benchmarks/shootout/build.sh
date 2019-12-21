@@ -32,5 +32,5 @@ innative-cmd out/${bench}.wasm \
 
 gcc -O3 -DINNATIVE_NATIVE -o out/${bench}_innative main/main_${bench}.c -Lout -l${bench}
 
-iwasm-aotc -o out/${bench}.iwasm-aot out/${bench}.wasm
+wamrc -o out/${bench}.iwasm-aot out/${bench}.wasm
 
