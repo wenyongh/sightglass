@@ -12,12 +12,20 @@ void *memset(void *s, int c, size_t n)
     return s;
 }
 
+__attribute__ ((__optimize__ ("-fno-tree-loop-distribute-patterns")))
 void *memmove(void *dest, const void *src, size_t n)
 {
-    char *p_dst = (char*)dest, *p_dst_end = p_dst + n;
-    char *p_src = (char*)src;
-
-    while (p_dst < p_dst_end)
-        *p_dst++ = *p_src++;
+    char *d = dest;
+    const char *s = src;
+    if (d < s) {
+        while (n--)
+            *d++ = *s++;
+    }
+    else {
+        const char *lasts = s + (n-1);
+        char *lastd = d + (n-1);
+        while (n--)
+            *lastd-- = *lasts--;
+    }
     return dest;
 }
