@@ -10,10 +10,12 @@ wavm disassemble ${bench}.wasm ${bench}.wast
 wavm compile ${bench}.wasm ${bench}.wavm-aot
 
 innative-cmd ${bench}.wasm \
-        -f o3 ${cflags_innative1} \
+        -f sandbox ${cflags_innative1} \
         -o lib${bench}.so
 
-gcc -O3 -o ${bench}_innative main_${bench}.c -L. -l${bench}
+clang-8 -O3 -o ${bench}_innative main_${bench}.c -L. -l${bench}
+
+lucetc -o lib${bench}_lucet.so ${bench}.wasm
 
 wamrc -o ${bench}.iwasm-aot ${bench}.wasm
 

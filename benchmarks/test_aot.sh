@@ -49,13 +49,16 @@ function print_bench_name()
 
 #run benchmarks
 cd $OUT_DIR
-echo -en "\t\t\t\t\tnative\tiwasm-j\tiwasm-a\twavm-j\twavm-a\twamtime\tinnative\n" >> $REPORT
+echo -en "\t\t\t\t\tnativeg\tnativec\tiwasm-j\tiwasm-a\twavm-j\twavm-a\tlucet-a\twamtime\tinnative\n" >> $REPORT
 for t in $SHOOTOUT_CASES $LIFE_CASES
 do
         print_bench_name $t
 
-        echo "run $t by native ..."
-        #remove the extra newline character output by 'time'
+        echo "run $t by native gcc ..."
+        echo -en "\t" >> $REPORT
+        $TIME -f "real-%e-time" ./${t}_native_gcc 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+
+        echo "run $t by native clang ..."
         echo -en "\t" >> $REPORT
         $TIME -f "real-%e-time" ./${t}_native 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
@@ -75,9 +78,13 @@ do
         echo -en "\t" >> $REPORT
         $TIME -f "real-%e-time" wavm run --precompiled --function=app_main ${t}.wavm-aot 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
+        echo "run $t by lucet ..."
+        echo -en "\t" >> $REPORT
+        $TIME -f "real-%e-time" lucet-wasi --entrypoint app_main lib${t}_lucet.so 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+
         echo "run $t by wasmtime ..."
         echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" wasmtime --invoke=app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+        $TIME -f "real-%e-time" wasmtime -o --invoke=app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
         echo "run $t by innative ..."
         echo -en "\t" >> $REPORT

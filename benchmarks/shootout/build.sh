@@ -8,7 +8,11 @@ export cflags_innative="disable_tail_call check_int_division check_memory_access
 
 export cflags_innative1="sandbox noinit library"
 
-gcc -O3 -o out/${bench}_native -Dblack_box=set_res \
+gcc -O3 -o out/${bench}_native_gcc -Dblack_box=set_res \
+        -Dbench=${bench} \
+        -I../../include ${bench}.c main/main_${bench}.c main/my_libc.c
+
+clang-8 -O3 -o out/${bench}_native -Dblack_box=set_res \
         -Dbench=${bench} \
         -I../../include ${bench}.c main/main_${bench}.c main/my_libc.c
 
@@ -27,10 +31,12 @@ wavm disassemble out/${bench}.wasm out/${bench}.wast
 wavm compile out/${bench}.wasm out/${bench}.wavm-aot
 
 innative-cmd out/${bench}.wasm \
-        -f o3 ${cflags_innative1} \
+        -f sandbox ${cflags_innative1} \
         -o out/lib${bench}.so
 
-gcc -O3 -DINNATIVE_NATIVE -o out/${bench}_innative main/main_${bench}.c -Lout -l${bench}
+clang-8 -O3 -DINNATIVE_NATIVE -o out/${bench}_innative main/main_${bench}.c -Lout -l${bench}
+
+lucetc --opt-level 2 -o out/lib${bench}_lucet.so out/${bench}.wasm
 
 wamrc -o out/${bench}.iwasm-aot out/${bench}.wasm
 
