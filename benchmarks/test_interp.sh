@@ -38,14 +38,18 @@ function print_bench_name()
 
 #run benchmarks
 cd $OUT_DIR
-echo -en "\t\t\t\t\tiwasm-interp\n" >> $REPORT
+echo -en "\t\t\t\t\tiwasm\twasm3\n" >> $REPORT
 for t in $SHOOTOUT_CASES
 do
         print_bench_name $t
 
-        echo "run $t by iwasm interp..."
+        echo "run $t by iwasm interpreter..."
         echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" iwasm -f app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+        $TIME -f "real-%e-time" iwasm_old -f app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+
+        echo "run $t by wasm3 interpreter..."
+        echo -en "\t" >> $REPORT
+        $TIME -f "real-%e-time" wasm3 --func app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
         echo -en "\n" >> $REPORT
 done
