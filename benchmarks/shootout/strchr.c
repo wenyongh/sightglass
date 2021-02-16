@@ -9,7 +9,7 @@
 #ifndef TEST_INTERPRETER
 #define ITERATIONS 1000
 #else
-#define ITERATIONS 100
+#define ITERATIONS 400
 #endif
 
 typedef struct StrchrCtx_ {

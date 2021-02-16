@@ -1,7 +1,7 @@
 
 #include <sightglass.h>
 
-#include <assert.h>
+// #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -10,7 +10,7 @@
 #else
 #define STR_SIZE 1000
 #endif
-#define ITERATIONS 10
+#define ITERATIONS 200
 
 typedef struct MemmoveCtx_ {
     char * str;
@@ -40,7 +40,7 @@ memmove_body(void *ctx_)
 
     //ctx->str = calloc(ctx->str_size, (size_t) 1U);
     ctx->str = str_buf;
-    assert(ctx->str != NULL);
+    // assert(ctx->str != NULL);
 
     for (i = 0; i < ITERATIONS; i++) {
         BLACK_BOX(ctx->str);

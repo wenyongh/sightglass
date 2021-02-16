@@ -1,21 +1,11 @@
 export bench=$1
 
-export cflags_innative="disable_tail_call check_int_division check_memory_access \
-                        check_float_trunc check_indirect_call check_stack_overflow \
-                        noinit sandbox strict"
-
-export cflags_innative1="sandbox noinit library"
+readonly WAMRC_CMD="wamrc"
 
 wavm disassemble ${bench}.wasm ${bench}.wast
 wavm compile ${bench}.wasm ${bench}.wavm-aot
 
-innative-cmd ${bench}.wasm \
-        -f sandbox ${cflags_innative1} \
-        -o lib${bench}.so
+lucetc --opt-level 2 -o lib${bench}_lucet.so ${bench}.wasm
 
-clang-8 -O3 -o ${bench}_innative main_${bench}.c -L. -l${bench}
-
-lucetc -o lib${bench}_lucet.so ${bench}.wasm
-
-wamrc -o ${bench}.iwasm-aot ${bench}.wasm
+$WAMRC_CMD -o ${bench}.iwasm-aot ${bench}.wasm
 

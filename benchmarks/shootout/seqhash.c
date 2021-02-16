@@ -7,13 +7,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ARENA_SIZE ((size_t) 1000000)
-#define LEVEL_FIRST 1
-#ifndef TEST_INTERPRETER
-#define LEVEL_LAST 5
+#if defined(STM32)
+#  define ARENA_SIZE ((size_t) 10000)
+#elif defined(ESP32)
+#  define ARENA_SIZE ((size_t) 2000)
 #else
-#define LEVEL_LAST 1
+#  define ARENA_SIZE ((size_t) 1000000)
 #endif
+
+#define LEVEL_FIRST 1
+
+#if defined(STM32) || defined(ESP32)
+#  define LEVEL_LAST 1
+#elif !defined(TEST_INTERPRETER)
+#  define LEVEL_LAST 5
+#else
+#  define LEVEL_LAST 1
+#endif
+
 #define LEVELS (LEVEL_LAST - LEVEL_FIRST + 1)
 #define HASH_ITERATIONS 1
 

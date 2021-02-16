@@ -3,10 +3,14 @@
 
 #include <stdint.h>
 
-#ifndef TEST_INTERPRETER
-#define ITERATIONS 10000 * 100
+#ifdef STM32
+#  define ITERATIONS 10000 * 1
+#elif defined(ESP32)
+#  define ITERATIONS 2000
+#elif !defined(TEST_INTERPRETER)
+#  define ITERATIONS 10000 * 100
 #else
-#define ITERATIONS 10000 * 10
+#  define ITERATIONS 10000 * 80
 #endif
 
 #define gimli_BLOCKBYTES 48

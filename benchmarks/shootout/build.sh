@@ -2,21 +2,19 @@ mkdir -p out
 
 export bench=$1
 
-export cflags_innative="disable_tail_call check_int_division check_memory_access \
-                        check_float_trunc check_indirect_call check_stack_overflow \
-                        noinit sandbox strict"
+readonly WAMRC_CMD="wamrc"
 
-export cflags_innative1="sandbox noinit library"
-
-gcc -O3 -o out/${bench}_native_gcc -Dblack_box=set_res \
+gcc -O3 -o out/${bench}_native -Dblack_box=set_res \
         -Dbench=${bench} \
         -I../../include ${bench}.c main/main_${bench}.c main/my_libc.c
 
-clang-8 -O3 -o out/${bench}_native -Dblack_box=set_res \
-        -Dbench=${bench} \
+emcc -O3 -s WASM=1 \
+        -o out/${bench}_node.html \
+        -o out/${bench}_node.js \
+        -Dblack_box=set_res -Dbench=${bench} \
         -I../../include ${bench}.c main/main_${bench}.c main/my_libc.c
 
-clang-8 -O3 --target=wasm32 -nostdlib \
+/opt/wasi-sdk/bin/clang -O3 -nostdlib \
         -Wno-unknown-attributes \
         -Dblack_box=set_res \
         -DINNATIVE_WASM \
@@ -30,13 +28,11 @@ clang-8 -O3 --target=wasm32 -nostdlib \
 wavm disassemble out/${bench}.wasm out/${bench}.wast
 wavm compile out/${bench}.wasm out/${bench}.wavm-aot
 
-innative-cmd out/${bench}.wasm \
-        -f sandbox ${cflags_innative1} \
-        -o out/lib${bench}.so
-
-clang-8 -O3 -DINNATIVE_NATIVE -o out/${bench}_innative main/main_${bench}.c -Lout -l${bench}
-
 lucetc --opt-level 2 -o out/lib${bench}_lucet.so out/${bench}.wasm
 
-wamrc -o out/${bench}.iwasm-aot out/${bench}.wasm
+if [[ $2 == "--sgx" ]];then
+    $WAMRC_CMD -sgx -o out/${bench}.iwasm-aot out/${bench}.wasm
+else
+    $WAMRC_CMD -o out/${bench}.iwasm-aot out/${bench}.wasm
+fi
 

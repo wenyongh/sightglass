@@ -5,28 +5,45 @@ OUT_DIR=$CUR_DIR/out
 REPORT=$CUR_DIR/report.txt
 TIME=/usr/bin/time
 
+IWASM_CMD="iwasm"
+
 BENCH_NAME_MAX_LEN=16
-SHOOTOUT_CASES="base64 fib2 gimli heapsort memmove nestedloop nestedloop2 nestedloop3 \
+SHOOTOUT_CASES="base64 fib2 gimli heapsort matrix memmove nestedloop nestedloop2 nestedloop3 \
                 random seqhash sieve strchr switch2"
 LIFE_CASES="fib pollard snappy"
+SGX_OPT=""
 
 rm -f $REPORT
 touch $REPORT
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR
 
+# Pass "all" to the script to test all runtimes
+if [ "$1" == "all" ];then
+    echo "test all runtimes"
+else
+    echo "only test native and iwasm"
+fi
 
-#build shootout benchmarks
+if [[ $1 == "--sgx" ||  $2 == "--sgx" ]];then
+    IWASM_CMD="iwasm_sgx"
+    SGX_OPT="--sgx"
+fi
+
+# emsdk must be installed at /opt/emsdk
+source /opt/emsdk/emsdk_env.sh
+
+# Build shootout benchmarks
 cd $CUR_DIR/shootout
 for t in $SHOOTOUT_CASES
 do
         echo "build $t ..."
-        ./build.sh $t
+        ./build.sh $t ${SGX_OPT}
 done
 
 cp out/* $OUT_DIR
 
-#build life benchmarks
+# Build life benchmarks
 cd $CUR_DIR/life
 for t in $LIFE_CASES
 do
@@ -47,29 +64,37 @@ function print_bench_name()
         fi
 }
 
-#run benchmarks
+# Run benchmarks
 cd $OUT_DIR
-echo -en "\t\t\t\t\tnativeg\tnativec\tiwasm-j\tiwasm-a\twavm-j\twavm-a\tlucet-a\twamtime\tinnative\n" >> $REPORT
+if [ "$1" == "all" ];then
+    echo -en "\t\t\t\t\tnative\tiwasm-j\tiwasm-a\twavm-j\twavm-a\twamtime\tlucet-a\twasmer\tnodejs\n" >> $REPORT
+elif [[ "$1" == "jit" ]];then
+    echo -en "\t\t\t\t\tnative\tiwasm-j\tiwasm-a\n" >> $REPORT
+else
+    echo -en "\t\t\t\t\tnative\tiwasm-a\n" >> $REPORT
+fi
+
 for t in $SHOOTOUT_CASES $LIFE_CASES
 do
-        print_bench_name $t
+    print_bench_name $t
 
-        echo "run $t by native gcc ..."
-        echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" ./${t}_native_gcc 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+    echo "run $t by native ..."
+    # Remove the extra newline character output by 'time'
+    echo -en "\t" >> $REPORT
+    $TIME -f "real-%e-time" ./${t}_native 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
-        echo "run $t by native clang ..."
-        echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" ./${t}_native 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
-
+    if [[ "$1" == "jit" || "$1" == "all" ]];then
         echo "run $t by iwasm jit..."
         echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" iwasm -f app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+        $TIME -f "real-%e-time" $IWASM_CMD -f app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+    fi
 
-        echo "run $t by iwasm aot..."
-        echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" iwasm -f app_main ${t}.iwasm-aot 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+    echo "run $t by iwasm aot..."
+    echo -en "\t" >> $REPORT
+    $TIME -f "real-%e-time" $IWASM_CMD -f app_main ${t}.iwasm-aot 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
+    # Not run these runtimes by default
+    if [ "$1" == "all" ];then
         echo "run $t by wavm jit ..."
         echo -en "\t" >> $REPORT
         $TIME -f "real-%e-time" wavm run --function=app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
@@ -78,17 +103,22 @@ do
         echo -en "\t" >> $REPORT
         $TIME -f "real-%e-time" wavm run --precompiled --function=app_main ${t}.wavm-aot 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
+        echo "run $t by wasmtime ..."
+        echo -en "\t" >> $REPORT
+        $TIME -f "real-%e-time" wasmtime --invoke=app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+
         echo "run $t by lucet ..."
         echo -en "\t" >> $REPORT
         $TIME -f "real-%e-time" lucet-wasi --entrypoint app_main lib${t}_lucet.so 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
-        echo "run $t by wasmtime ..."
+        echo "run $t by wasmer ..."
         echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" wasmtime -o --invoke=app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+        $TIME -f "real-%e-time" wasmer run --llvm --invoke app_main ${t}.wasm 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
 
-        echo "run $t by innative ..."
+        echo "run $t by nodejs ..."
         echo -en "\t" >> $REPORT
-        $TIME -f "real-%e-time" ./${t}_innative 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+        $TIME -f "real-%e-time" nodejs ${t}_node 2>&1 | grep "real-.*-time" | awk -F '-' '{ORS=""; print $2}' >> $REPORT
+    fi
 
         echo -en "\n" >> $REPORT
 done

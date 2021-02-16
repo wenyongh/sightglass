@@ -6,10 +6,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef TEST_INTERPRETER
-#define ITERATIONS 20000
+#ifdef STM32
+#  define ITERATIONS 100
+#elif defined(ESP32)
+#  define ITERATIONS 20
+#elif !defined(TEST_INTERPRETER)
+#  define ITERATIONS 20000
 #else
-#define ITERATIONS 2000
+#  define ITERATIONS 10000
 #endif
 
 #define base64_ENCODED_LEN(BIN_LEN, VARIANT)                                                     \

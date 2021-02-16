@@ -3,10 +3,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#ifndef TEST_INTERPRETER
-#define LENGTH 40000000
+#ifdef STM32
+#  define LENGTH 5000000
+#elif defined(ESP32)
+#  define LENGTH 1000000
+#elif !defined(TEST_INTERPRETER)
+#  define LENGTH 40000000
 #else
-#define LENGTH 10000000
+#  define LENGTH 120000000
 #endif
 
 #define IA 3877

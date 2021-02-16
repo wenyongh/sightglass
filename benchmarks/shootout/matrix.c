@@ -4,14 +4,27 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifndef TEST_INTERPRETER
-#define LENGTH 300000
+#ifdef STM32
+#  define LENGTH 100
+#elif defined(ESP32)
+#  define LENGTH 100
+#elif !defined(TEST_INTERPRETER)
+#  define LENGTH 300000
 #else
-#define LENGTH 1000
+#  define LENGTH 15000
 #endif
+
 #define SIZE 20
 
-static char buf[102400] = { 0 };
+#ifdef STM32
+#  define BUF_LEN 1024 * 10
+#elif defined(ESP32)
+#  define BUF_LEN 1024 * 10
+#else
+#  define BUF_LEN 1024 * 100
+#endif
+
+static char buf[BUF_LEN] = { 0 };
 static char *p = buf;
 
 static int **

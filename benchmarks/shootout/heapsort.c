@@ -4,12 +4,18 @@
 //#include <math.h>
 #include <stdlib.h>
 
-#ifndef TEST_INTERPRETER
-#define LENGTH 10000
-#define ITERATIONS 1000
+#ifdef STM32
+#  define LENGTH 1000
+#  define ITERATIONS 100
+#elif defined(ESP32)
+#  define LENGTH 200
+#  define ITERATIONS 20
+#elif !defined(TEST_INTERPRETER)
+#  define LENGTH 10000
+#  define ITERATIONS 1000
 #else
-#define LENGTH 1000
-#define ITERATIONS 100
+#  define LENGTH 1000
+#  define ITERATIONS 4500
 #endif
 
 #define IM 139968

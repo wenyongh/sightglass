@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __ZEPHYR__
+#include <zephyr.h>
+#include <sys/printk.h>
+#endif
+
 #ifndef INNATIVE_NATIVE
 static unsigned res = 0;
 
@@ -27,8 +32,16 @@ unsigned app_main()
 #ifndef INNATIVE_WASM
 int main(int argc, char **argv)
 {
+#ifdef __ZEPHYR__
+        int start, end;
+    start = k_uptime_get_32();
+#endif
     unsigned ret = app_main();
     printf("##ret: %d\n", ret);
+#ifdef __ZEPHYR__
+    end = k_uptime_get_32();
+    printf("elpase: %d\n", (end - start));
+#endif
     return 0;
 }
 #endif

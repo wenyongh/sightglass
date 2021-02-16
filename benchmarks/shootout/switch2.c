@@ -5,12 +5,18 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifndef TEST_INTERPRETER
-#define ITERATIONS 500
-#define LENGTH 2500
+#ifdef STM32
+#  define ITERATIONS 10
+#  define LENGTH 500
+#elif defined(ESP32)
+#  define ITERATIONS 2
+#  define LENGTH 500
+#elif !defined(TEST_INTERPRETER)
+#  define ITERATIONS 500
+#  define LENGTH 2500
 #else
-#define ITERATIONS 100
-#define LENGTH 500
+#  define ITERATIONS 800
+#  define LENGTH 600
 #endif
 
 static uint32_t x_buf[LENGTH] = { 0 };

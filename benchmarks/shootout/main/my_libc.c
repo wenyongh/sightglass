@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#ifndef __ZEPHYR__
 __attribute__ ((__optimize__ ("-fno-tree-loop-distribute-patterns")))
 void *memset(void *s, int c, size_t n)
 {
@@ -29,3 +30,4 @@ void *memmove(void *dest, const void *src, size_t n)
     }
     return dest;
 }
+#endif

@@ -4,9 +4,9 @@
 #include <stdlib.h>
 
 #ifndef TEST_INTERPRETER
-#define LENGTH 200
+#define LENGTH 110
 #else
-#define LENGTH 80
+#define LENGTH 50
 #endif
 
 typedef struct NestedLoop3Ctx_ {
@@ -42,7 +42,7 @@ nestedloop3_body(void *ctx_)
                 for (d = c; d < n; d++) {
                     for (e = d; e < n; e++) {
                         for (f = e; f < n; f++) {
-                            x++;
+                            x += (a + b + c) * (d + e) * (x + 10);
                         }
                     }
                 }
